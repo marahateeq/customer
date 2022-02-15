@@ -6,7 +6,11 @@ class SplashSC extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return  SplashScreen(
+    return SplashScreen(
+      image: Image.asset(
+        'images/icon.png',
+        fit: BoxFit.fill,
+      ),
       seconds: 5,
       navigateAfterSeconds: const AfterSplash(),
       // ignore: unnecessary_new
@@ -15,13 +19,12 @@ class SplashSC extends StatelessWidget {
         style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20.0),
       ),
       //image: new Image.network(
-        //  'https://flutter.io/images/catalog-widget-placeholder.png'),
+      //  'https://flutter.io/images/catalog-widget-placeholder.png'),
       backgroundColor: Colors.orangeAccent,
       loaderColor: Colors.red,
     );
   }
 }
-
 
 class AfterSplash extends StatelessWidget {
   const AfterSplash({Key key}) : super(key: key);
@@ -33,12 +36,11 @@ class AfterSplash extends StatelessWidget {
         title: const Text("Welcome In SplashScreen Package"),
         automaticallyImplyLeading: false,
       ),
-      body: const Center(
-        child: Text(
-          "Succeeded!",
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0),
-        ),
-      ),
+      body: Center(
+          child: Image.asset(
+        'images/icon.png',
+        fit: BoxFit.fill,
+      )),
     );
   }
 }

@@ -70,7 +70,7 @@ class _HomepageState extends State<Homepage> {
   void initState() {
     super.initState();
     _isLoading = true;
-    // emver();
+    emver();
     Provider.of<Auth>(context, listen: false).userData();
     Provider.of<Restaurants>(context, listen: false).fetchAndSetRestaurants();
     Provider.of<Products>(context, listen: false)
@@ -280,21 +280,27 @@ class _HomepageState extends State<Homepage> {
                             children: [
                               Card(
                                 child: Image(
-                                    image: NetworkImage(listrest[0].imageUrl)),
+                                    image: imageFromBase64String(
+                                            listrest[0].imageUrl)
+                                        .image),
                               ),
                               const SizedBox(
                                 width: 10,
                               ),
                               Card(
                                 child: Image(
-                                    image: NetworkImage(listrest[1].imageUrl)),
+                                    image: imageFromBase64String(
+                                            listrest[1].imageUrl)
+                                        .image),
                               ),
                               const SizedBox(
                                 width: 10,
                               ),
                               Card(
                                 child: Image(
-                                    image: NetworkImage(listrest[2].imageUrl)),
+                                    image: imageFromBase64String(
+                                            listrest[2].imageUrl)
+                                        .image),
                               ),
                             ],
                           ),
@@ -335,19 +341,30 @@ class _HomepageState extends State<Homepage> {
                             children: [
                               MostPopularCard(
                                 image: Image(
-                                  image: NetworkImage(listprod[0].imageUrl),
+                                  image: imageFromBase64String(
+                                          listprod[7].imageUrl)
+                                      .image,
                                 ),
-                                name: listprod[0].title,
+                                name: listprod[7].title,
                               ),
                               const SizedBox(
                                 width: 30,
                               ),
                               MostPopularCard(
-                                  name: listprod[1].title,
+                                  name: listprod[8].title,
                                   image: Image(
-                                      image: NetworkImage(
-                                    listprod[1].imageUrl,
-                                  )))
+                                      image: imageFromBase64String(
+                                    listprod[8].imageUrl,
+                                  ).image)),
+                              const SizedBox(
+                                width: 30,
+                              ),
+                              MostPopularCard(
+                                  name: listprod[13].title,
+                                  image: Image(
+                                      image: imageFromBase64String(
+                                    listprod[13].imageUrl,
+                                  ).image)),
                             ],
                           ),
                         ),
@@ -542,44 +559,9 @@ class MostPopularCard extends StatelessWidget {
         Text(
           _name,
           style: Helper.getTheme(context)
-              .headline4
+              .headline6
               .copyWith(color: AppColor.primary),
         ),
-        Row(
-          children: [
-            const Text("Cafe"),
-            const SizedBox(
-              width: 5,
-            ),
-            const Padding(
-              padding: EdgeInsets.only(bottom: 5.0),
-              child: Text(
-                ".",
-                style: TextStyle(
-                  color: AppColor.orange,
-                  fontWeight: FontWeight.w900,
-                ),
-              ),
-            ),
-            const SizedBox(
-              width: 5,
-            ),
-            const Text("Western Food"),
-            const SizedBox(
-              width: 20,
-            ),
-            Image.asset("images/star_filled.png"),
-            const SizedBox(
-              width: 5,
-            ),
-            const Text(
-              "4.9",
-              style: TextStyle(
-                color: AppColor.orange,
-              ),
-            )
-          ],
-        )
       ],
     );
   }
