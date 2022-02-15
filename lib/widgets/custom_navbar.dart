@@ -68,9 +68,9 @@ class CustomNavBar extends StatelessWidget {
                               ? const Icon(Icons.fastfood)
                               : const Icon(Icons.fastfood),
                           menu
-                              ? const Text("Products Menu",
+                              ? const Text("Meals",
                                   style: TextStyle(color: AppColor.orange))
-                              : const Text("Products Menu"),
+                              : const Text("Meals"),
                         ],
                       ),
                     ),

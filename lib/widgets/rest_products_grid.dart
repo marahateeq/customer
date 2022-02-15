@@ -3,10 +3,13 @@ import 'package:customertest/widgets/product_item.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+int i = 1;
+
 class RestProductsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    final productData = Provider.of<Products>(context);
+    print(i++);
+    final productData = Provider.of<Products>(context, listen: false);
 
     final products = productData.items;
 

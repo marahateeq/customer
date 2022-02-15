@@ -1,9 +1,11 @@
+import 'dart:convert';
+
 import 'package:customertest/providers/cart.dart';
 import 'package:customertest/providers/product.dart';
 import 'package:customertest/widgets/badge.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:provider/provider.dart';
 
 import 'cart_screen.dart';
 
@@ -19,6 +21,9 @@ class ProductDetailScreen extends StatefulWidget {
 class _ProductDetailScreenState extends State<ProductDetailScreen> {
   int _qty = 0;
   String q = '0';
+  Image imageFromBase64String(String base64String) {
+    return Image.memory(base64Decode(base64String));
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -60,8 +65,8 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
               //title: Text(args.title),
               background: Hero(
                 tag: product.id,
-                child: Image.network(
-                  product.imageUrl,
+                child: Image(
+                  image: imageFromBase64String(product.imageUrl).image,
                   fit: BoxFit.cover,
                 ),
               ),
@@ -187,7 +192,7 @@ class _ProductDetailScreenState extends State<ProductDetailScreen> {
                     const Text(
                       'Description  ',
                       textAlign: TextAlign.left,
-                      style: TextStyle(color: Colors.black, fontSize: 30),
+                      style: TextStyle(color: Colors.black, fontSize: 22),
                     ),
                     const SizedBox(
                       height: 10,

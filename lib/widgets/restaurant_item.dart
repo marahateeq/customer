@@ -33,8 +33,8 @@ class RestaurantItem extends StatelessWidget {
           child: Hero(
             tag: restaurant.id,
             child: FadeInImage(
-              placeholder: NetworkImage(restaurant
-                  .imageUrl), // AssetImage('assets/images/laoding.png'),
+              placeholder: imageFromBase64String(restaurant.imageUrl)
+                  .image, // AssetImage('assets/images/laoding.png'),
               image: imageFromBase64String(restaurant.imageUrl).image,
               fit: BoxFit.cover,
             ),

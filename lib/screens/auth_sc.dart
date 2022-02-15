@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:customertest/models/http_exp.dart';
 import 'package:customertest/providers/auth.dart';
 import 'package:customertest/screens/user_information.dart';
@@ -206,35 +207,24 @@ class _AuthCardState extends State<AuthCard>
   }
 
   void _showE(String emsg) {
-    showDialog(
+    AwesomeDialog(
       context: context,
-      builder: (ctx) => AlertDialog(
-        title: const Text(
-          'Error Founded',
+      animType: AnimType.SCALE,
+      dialogType: DialogType.ERROR,
+      body: Center(
+        child: Text(
+          emsg,
+          style: TextStyle(fontStyle: FontStyle.italic),
         ),
-        titleTextStyle: const TextStyle(color: Colors.red, fontSize: 20),
-        content: Text(emsg),
-        elevation: 15,
-        actions: [
-          ElevatedButton(
-            style: ButtonStyle(
-                elevation: MaterialStateProperty.all(8),
-                shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-                    RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(18.0),
-                        side: const BorderSide(color: Colors.red)))),
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text(
-              'OK',
-              style: TextStyle(fontWeight: FontWeight.w900, fontSize: 20),
-            ),
-          )
-        ],
-        actionsAlignment: MainAxisAlignment.center,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        alignment: Alignment.center,
       ),
-    );
+      title: 'Erorr',
+
+      btnOkColor: Colors.teal,
+
+//desc: 'This is also Ignored',
+      btnOkText: "OK",
+      btnOkOnPress: () {},
+    )..show();
   }
 
   @override
