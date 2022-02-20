@@ -10,6 +10,7 @@ class UserInfo with ChangeNotifier {
 
   String authToken;
   String userId;
+  Map _data;
 
   getData(String authTok, String uId, List<Info> info) {
     authToken = authTok;
@@ -69,7 +70,7 @@ class UserInfo with ChangeNotifier {
 
   Future<void> addUI(Info uI) async {
     final url =
-        'https://test1-cf86f-default-rtdb.firebaseio.com/users.json?auth=$authToken';
+        'https://test1-cf86f-default-rtdb.firebaseio.com/users/$userId.json?auth=$authToken';
 
     try {
       final res = await http.post(
@@ -94,8 +95,10 @@ class UserInfo with ChangeNotifier {
         email: uI.email,
       );
       _users.add(newInfo);
+
       notifyListeners();
     } catch (e) {
+      print("erorr while updateing the infor user");
       rethrow;
     }
   }
@@ -124,5 +127,40 @@ class UserInfo with ChangeNotifier {
     } else {
       //print("in updateProduct ");
     }
+  }
+
+  Future<void> getUinfo() async {
+    print(authToken);
+
+    // try {
+    final url =
+        'https://test1-cf86f-default-rtdb.firebaseio.com/users/$userId.json?auth=$authToken';
+    final res = await http.get(
+      Uri.parse(url),
+    );
+    final extract = json.decode(res.body);
+    if (extract == null) {
+      // print("returen");
+      return;
+    } else {
+      // Map _data;
+      // print(extract);
+      extract.forEach((key, value) {
+        _data = value;
+        // print(value);
+      });
+      // print(_data);
+    }
+    notifyListeners();
+
+    // تعديل البيانات الموجودة عندي
+
+    // } catch (e) {
+    //   rethrow;
+    // }
+  }
+
+  Map get data {
+    return _data;
   }
 }

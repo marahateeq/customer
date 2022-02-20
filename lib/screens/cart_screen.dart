@@ -145,6 +145,7 @@ class _OrderButtonState extends State<OrderButton> {
                             map['delivery'] = true;
 
                             return showDialog(
+                                barrierDismissible: false,
                                 context: context,
                                 builder: (BuildContext context) {
                                   return Dialog(

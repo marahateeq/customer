@@ -10,15 +10,26 @@ class OrdersScreen extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Your Orders'),
+        centerTitle: true,
       ),
       body: FutureBuilder(
         future: Provider.of<Orders>(context, listen: false).fetchAndSetOrders(),
         builder: (ctx, AsyncSnapshot snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
-            return const CircularProgressIndicator();
+            return const Center(child: CircularProgressIndicator());
           } else {
             if (snapshot.error != null) {
               return const Center(child: Text('An error occured!'));
+            }
+            if (snapshot.data == null) {
+              return const Center(
+                  child: Text(
+                "There is no orders yet!",
+                style: TextStyle(
+                    fontWeight: FontWeight.bold,
+                    fontSize: 20,
+                    fontFamily: 'Quikhand'),
+              ));
             } else {
               return Consumer<Orders>(
                 builder: (ctx, orderData, child) => ListView.builder(

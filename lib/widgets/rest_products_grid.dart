@@ -8,7 +8,7 @@ int i = 1;
 class RestProductsGrid extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    print(i++);
+    // print(i++);
     final productData = Provider.of<Products>(context, listen: false);
 
     final products = productData.items;

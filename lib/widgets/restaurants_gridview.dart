@@ -5,6 +5,7 @@ import 'package:provider/provider.dart';
 
 class RestaurantsGridview extends StatelessWidget {
   const RestaurantsGridview({Key key}) : super(key: key);
+  
 
   @override
   Widget build(BuildContext context) {
@@ -13,6 +14,7 @@ class RestaurantsGridview extends StatelessWidget {
     final restuarants = restData.items;
 
     return GridView.builder(
+      
         padding: const EdgeInsets.all(10.0),
         itemCount: restuarants.length,
         itemBuilder: (ctx, i) => ChangeNotifierProvider.value(

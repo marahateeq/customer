@@ -77,8 +77,8 @@ class CustomNavBar extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         if (!offer) {
-                          Navigator.of(context).pushReplacementNamed(
-                              RestaurantsScreen.routeName);
+                          Navigator.of(context)
+                              .pushNamed(RestaurantsScreen.routeName);
                         }
                       },
                       child: Column(
@@ -100,8 +100,7 @@ class CustomNavBar extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         if (!profile) {
-                          Navigator.of(context)
-                              .pushReplacementNamed(Profile.routeName);
+                          Navigator.of(context).pushNamed(Profile.routeName);
                         }
                       },
                       child: Column(
@@ -120,8 +119,7 @@ class CustomNavBar extends StatelessWidget {
                     GestureDetector(
                       onTap: () {
                         if (!more) {
-                          Navigator.of(context)
-                              .pushReplacementNamed(MoreScreen.routeName);
+                          Navigator.of(context).pushNamed(MoreScreen.routeName);
                         }
                       },
                       child: Column(

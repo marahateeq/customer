@@ -1,0 +1,14 @@
+{
+
+"language":"language",
+"@language":{
+    "discription":"this is english language"
+
+},
+"sign_in":"Sign IN",
+"sign_out":"Log Out"
+,
+"sign_up":"Register"
+
+
+}

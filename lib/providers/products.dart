@@ -94,7 +94,7 @@ class Products with ChangeNotifier {
       final List<Product> loadedProducts = [];
       extractData.forEach((prodId, prodData) {
         loadedProducts.add(Product(
-          id:prodId,// prodData['creatorId'],
+          id: prodId, // prodData['creatorId'],
           title: prodData['title'],
           description: prodData['description'],
           price: prodData['price'],
@@ -102,10 +102,11 @@ class Products with ChangeNotifier {
           isFavorite: favData == null ? false : favData[prodId] ?? false,
         ));
         _items = loadedProducts;
-        notifyListeners();
+        print(loadedProducts);
       });
     } catch (e) {
       rethrow;
     }
+    notifyListeners();
   }
 }

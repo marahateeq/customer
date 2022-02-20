@@ -29,6 +29,9 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations: 
+    sdk: flutter         
+    
   cupertino_icons: ^1.0.2
   firebase_core: ^1.12.0
   font_awesome_flutter: ^9.2.0
@@ -46,7 +49,15 @@ dependencies:
   firebase_storage: ^10.2.7
   flutter_launcher_icons: ^0.9.2
   awesome_dialog: ^2.1.2
+  flutter_phoenix: ^1.0.0
 
+
+
+  # flutter_dependency:
+    # git:
+      # url : local-git-repo-previsously-cheched-out
+
+  
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
 
@@ -54,6 +65,7 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  
 flutter_icons:
   android: "launcher_icon"
 
@@ -71,6 +83,7 @@ flutter_icons:
 
 # The following section is specific to Flutter.
 flutter:
+  generate: true
 
 
 
@@ -82,6 +95,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - images/
+    
 
   # assets:
   #   - images/a_dot_burr.jpeg

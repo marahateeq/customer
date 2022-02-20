@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:customertest/screens/Homepage.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
@@ -119,6 +120,7 @@ class Auth extends ChangeNotifier {
     }
     final pref = await SharedPreferences.getInstance();
     pref.clear();
+  
 
     notifyListeners();
   }
@@ -156,6 +158,7 @@ class Auth extends ChangeNotifier {
     }
     final timeToExpiry = _exTime.difference(DateTime.now()).inSeconds;
     _authTimer = Timer(Duration(seconds: timeToExpiry), logout);
+    notifyListeners();
   }
 
   Future<void> userData() async {

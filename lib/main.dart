@@ -1,3 +1,5 @@
+// ignore_for_file: unnecessary_string_escapes
+
 import 'package:customertest/providers/auth.dart';
 import 'package:customertest/providers/cart.dart';
 import 'package:customertest/providers/orders.dart';
@@ -26,13 +28,14 @@ import 'package:customertest/screens/user_information.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'firebase_options.dart';
+import 'package:flutter_phoenix/flutter_phoenix.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() {
   //await init();
 
-  runApp(const MyApp());
+  runApp(Phoenix(child: const MyApp()));
 }
 
 Future init() async {
@@ -93,6 +96,9 @@ class MyApp extends StatelessWidget {
         builder: (ctx, auth, _) => MaterialApp(
           debugShowCheckedModeBanner: false,
           title: '',
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+
           theme: ThemeData(
             primarySwatch: Colors.deepOrange,
             fontFamily: 'Lato',
@@ -108,7 +114,7 @@ class MyApp extends StatelessWidget {
           //OrdersScreen(),
           routes: {
             AuthSC.routeName: (_) => const AuthSC(),
-            Homepage.routeName: (_) => Homepage(),
+            Homepage.routeName: (_) => const Homepage(),
             ProductOverviewScreen.routeName: (_) =>
                 const ProductOverviewScreen(),
             ProductDetailScreen.routeName: (_) => const ProductDetailScreen(),
@@ -127,6 +133,8 @@ class MyApp extends StatelessWidget {
             UserInformation.routeName: (context) => const UserInformation(),
             CheckOut.routeName: (context) => const CheckOut(),
           },
+
+          // retrun supportedLocale.first;
         ),
       ),
     );

@@ -17,12 +17,11 @@ class RestuarantDetailScreen extends StatefulWidget {
 }
 
 class _RestuarantDetailScreen extends State<RestuarantDetailScreen> {
-  var _isLoading = false;
+  bool _isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _isLoading = true;
   }
 
   @override
@@ -34,13 +33,12 @@ class _RestuarantDetailScreen extends State<RestuarantDetailScreen> {
           (_) => setState(
             () => _isLoading = false,
           ),
-        )
-        .catchError((error) => _isLoading = false);
-
-    var _key = GlobalKey<ScaffoldState>();
+        );
+    print(args);
+    // var _key = GlobalKey<ScaffoldState>();
 
     return Scaffold(
-      key: _key,
+      // key: _key,
       appBar: AppBar(
         centerTitle: true,
         title: Text(args.name),
@@ -64,9 +62,10 @@ class _RestuarantDetailScreen extends State<RestuarantDetailScreen> {
       ),
       body: _isLoading
           ? const Center(child: CircularProgressIndicator())
-          :
-          //Text(args.id ),
-          RestProductsGrid(),
+          : RestProductsGrid(),
+
+      //Text(args.id ),
+
       /*Container(
         width: double.infinity,
         height: 300,

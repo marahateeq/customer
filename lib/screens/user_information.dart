@@ -1,9 +1,8 @@
+import 'package:customertest/providers/emial_ver.dart';
 import 'package:customertest/providers/info.dart';
 import 'package:customertest/providers/user_info.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
-import 'Homepage.dart';
 
 class UserInformation extends StatefulWidget {
   const UserInformation({Key key}) : super(key: key);
@@ -19,7 +18,7 @@ class _UserInformationState extends State<UserInformation> {
   final _addressFocusNode = FocusNode();
   final _emailFocusNode = FocusNode();
   final _formkey = GlobalKey<FormState>();
-
+  String x = "justeat";
   var _newUI = Info(
       // in case you want to modify the product values
       id: null,
@@ -110,9 +109,8 @@ class _UserInformationState extends State<UserInformation> {
       _isLoading = false;
     });
     //Navigator.of(context).pop();
-    Navigator.of(context).pushReplacementNamed(
-      Homepage.routeName,
-    );
+    await Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => const Verfiy()));
   }
 
   @override
@@ -137,6 +135,27 @@ class _UserInformationState extends State<UserInformation> {
         child: SingleChildScrollView(
           child: Column(
             children: [
+              ClipOval(
+                child: Stack(
+                  children: [
+                    SizedBox(
+                      height: 150,
+                      width: 150,
+                      child:
+                          Image.network('https://api.multiavatar.com/$x.png'),
+                    ),
+                    // Positioned(
+                    // bottom: 0,
+                    //   child: Container(
+                    //       height: 30,
+                    //       width: 150,
+                    //       color: Colors.black.withOpacity(0.6),
+                    //       child: Image.network(
+                    //           "https://api.multiavatar.com/justeat.png")),
+                    // )
+                  ],
+                ),
+              ),
               const SizedBox(
                 height: 20,
               ),
@@ -144,7 +163,7 @@ class _UserInformationState extends State<UserInformation> {
               Container(
                 margin: const EdgeInsets.all(20),
                 child: TextFormField(
-                  style: const TextStyle(color: Colors.blue),
+                  // style: const TextStyle(color: Colors.blue),
                   decoration: InputDecoration(
 
                       //fillColor: Colors.lightGreen,
@@ -164,6 +183,16 @@ class _UserInformationState extends State<UserInformation> {
                         color: Colors.pink,
                       )),
                   keyboardType: TextInputType.text,
+                  onChanged: (value) {
+                    setState(() {
+                      if (value == "") {
+                        x = "justeat";
+                      } else {
+                        x = value;
+                      }
+                      print(value);
+                    });
+                  },
                   onFieldSubmitted: (_) {
                     FocusScope.of(context).requestFocus(_lnameFocusNode);
                   },

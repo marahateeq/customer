@@ -23,14 +23,13 @@ class _BottomNavBarState extends State<BottomNavBar> {
       Navigator.of(context).pushReplacementNamed(Homepage.routeName);
     }
     if (_selectedIndex == 1) {
-      Navigator.of(context)
-          .pushReplacementNamed(ProductOverviewScreen.routeName);
+      Navigator.of(context).pushNamed(ProductOverviewScreen.routeName);
     }
     if (_selectedIndex == 2) {
-      Navigator.of(context).pushReplacementNamed(RestaurantsScreen.routeName);
+      Navigator.of(context).pushNamed(RestaurantsScreen.routeName);
     }
     if (_selectedIndex == 3) {
-      Navigator.of(context).pushReplacementNamed(MoreScreen.routeName);
+      Navigator.of(context).pushNamed(MoreScreen.routeName);
     }
   }
 

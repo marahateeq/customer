@@ -153,15 +153,15 @@ class _AuthCardState extends State<AuthCard>
       } else {
         await Provider.of<Auth>(context, listen: false)
             .signUp(_authdata['email'], _authdata['password'])
-            .whenComplete(() {
-          if (_isloading == false) {
-            setState(() {
-              _authMode = AuthMode.Login;
-            });
-          }
-          Navigator.of(context).pushReplacementNamed(
-            UserInformation.routeName,
-          );
+            .then((value) {
+          Navigator.of(context).pushNamedAndRemoveUntil(
+              UserInformation.routeName, (route) => false);
+
+          // else {
+          //   (e) {
+          //     dispose();
+          //   };
+          // }
         });
       }
     } on HttpExp catch (e) {
@@ -214,7 +214,7 @@ class _AuthCardState extends State<AuthCard>
       body: Center(
         child: Text(
           emsg,
-          style: TextStyle(fontStyle: FontStyle.italic),
+          style: const TextStyle(fontStyle: FontStyle.italic),
         ),
       ),
       title: 'Erorr',
@@ -224,7 +224,7 @@ class _AuthCardState extends State<AuthCard>
 //desc: 'This is also Ignored',
       btnOkText: "OK",
       btnOkOnPress: () {},
-    )..show();
+    ).show();
   }
 
   @override

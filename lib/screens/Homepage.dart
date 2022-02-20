@@ -6,6 +6,7 @@ import 'package:customertest/providers/auth.dart';
 import 'package:customertest/providers/cart.dart';
 import 'package:customertest/providers/products.dart';
 import 'package:customertest/providers/restuarants.dart';
+import 'package:customertest/screens/orders_screen.dart';
 import 'package:customertest/screens/product_overview_screen.dart';
 import 'package:customertest/screens/profile.dart';
 import 'package:customertest/screens/restaurants_screen.dart';
@@ -16,6 +17,7 @@ import 'package:customertest/widgets/searchbar.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../providers/user_info.dart';
 import 'cart_screen.dart';
 
 class Homepage extends StatefulWidget {
@@ -24,79 +26,126 @@ class Homepage extends StatefulWidget {
 
   @override
   _HomepageState createState() => _HomepageState();
+  //callback when layout build done
+
 }
 
 class _HomepageState extends State<Homepage> {
   get kPrimaryColor => Colors.deepOrange;
   String uemail = 'Just Eat';
 
-  var _isLoading = false;
+  bool _isLoading = false;
 
   @override
   void dispose() {
     super.dispose();
   }
 
+  @override
+  void initState() {
+    _isLoading = true;
+    super.initState();
+
+    // WidgetsFlutterBinding.ensureInitialized(_go());
+    emver().then((value) async => await _go()).whenComplete(() {
+      setState(() {
+        _isLoading = false;
+        print(i++);
+      });
+    });
+    // emver();
+    // _go();
+  }
+
 //new
   Future<void> emver() async {
+    await Provider.of<UserInfo>(context, listen: false).getUinfo();
+
     await Provider.of<Auth>(context, listen: false).userData();
     bool v = Provider.of<Auth>(context, listen: false).emailverified;
-    if (v == false) {
-      AwesomeDialog(
-        context: context,
-        animType: AnimType.SCALE,
-        dialogType: DialogType.INFO,
-        body: const Center(
-          child: Text(
-            'your email address not verified , Please check your email! ',
-            style: TextStyle(fontStyle: FontStyle.italic),
+    try {
+      if (v == false) {
+        AppLifecycleState.paused;
+        AwesomeDialog(
+          dismissOnBackKeyPress: false,
+          dismissOnTouchOutside: false,
+          context: context,
+          animType: AnimType.SCALE,
+          dialogType: DialogType.INFO,
+          body: const Center(
+            child: Text(
+              'your email address not verified , Please check your email! ',
+              style: TextStyle(fontStyle: FontStyle.italic),
+            ),
           ),
-        ),
-        title: 'Verify',
-        btnCancelOnPress: () async {
-          await Provider.of<Auth>(context, listen: false).logout();
-        },
-        //desc: 'This is also Ignored',
-        btnOkOnPress: () async {
-          await Provider.of<Auth>(context, listen: false).sendE().then(
-              (value) async =>
-                  await Provider.of<Auth>(context, listen: false).logout());
-        },
-      ).show();
+          title: 'Verify',
+
+          btnCancelOnPress: () async {
+            Provider.of<Auth>(context, listen: false).logout();
+          },
+          btnOkColor: Colors.teal,
+          btnCancelColor: Colors.red,
+          btnCancelText: "Exit",
+          //desc: 'This is also Ignored',
+          btnOkText: "ReSend",
+          btnOkOnPress: () async {
+            await Provider.of<Auth>(context, listen: false).sendE().then(
+                (value) async =>
+                    await Provider.of<Auth>(context, listen: false).logout());
+          },
+        ).show();
+      } else if (v == true) {
+        AppLifecycleState.resumed;
+      }
+    } catch (e) {
+      print("erorr while vervication");
+      rethrow;
     }
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _isLoading = true;
-    emver();
-    Provider.of<Auth>(context, listen: false).userData();
-    Provider.of<Restaurants>(context, listen: false).fetchAndSetRestaurants();
-    Provider.of<Products>(context, listen: false)
+  Future<void> _go() async {
+    await Provider.of<Restaurants>(context, listen: false)
+        .fetchAndSetRestaurants();
+    await Provider.of<Products>(context, listen: false)
         .fetchAndSetProducts()
-        .then(
-          (_) => setState(
-            () => _isLoading = false,
-          ),
-        )
-        .catchError((error) => _isLoading = false);
+        .whenComplete(() {
+      _isLoading = false;
+      return;
+    }).catchError((error) {
+      print("erroe while loading");
+      _isLoading = false;
+    });
   }
 
   Image imageFromBase64String(String base64String) {
     return Image.memory(base64Decode(base64String));
   }
 
+  int i = 1;
   @override
   Widget build(BuildContext context) {
+    // WidgetsFlutterBinding.ensureInitialized();
+
+    // Future.delayed(Duration.zero, (() async => await _go()));
+
+    // final emaild = Provider.of<Auth>(context, listen: false);
+    // final uemail = emaild.emaildata;
     final productdata = Provider.of<Products>(context, listen: false);
     final listprod = productdata.items;
 
     final restdata = Provider.of<Restaurants>(context, listen: false);
     final listrest = restdata.items;
-
-    final emaild = Provider.of<Auth>(context, listen: false);
-    final uemail = emaild.emaildata;
+    Map m = Provider.of<UserInfo>(context, listen: false).data;
+    String mn, ml, me;
+    if (m == null) {
+      mn = 'justeat';
+      ml = "";
+      me = "";
+    } else {
+      mn = m['fname'];
+      ml = m['lname'];
+      me = m['email'];
+    }
 
     return Scaffold(
       appBar: AppBar(
@@ -130,7 +179,8 @@ class _HomepageState extends State<Homepage> {
           ),
         ),
         backgroundColor: Colors.deepOrange,
-        /* actions: [
+        centerTitle:
+            true, /* actions: [
     IconButton(icon: Icon(Icons.search),
     onPressed: () async {
 
@@ -146,23 +196,27 @@ class _HomepageState extends State<Homepage> {
         child: Column(
           children: [
             UserAccountsDrawerHeader(
-              currentAccountPicture:
-                  const CircleAvatar(backgroundColor: Colors.deepOrange),
-              accountName: const Text("Welcome"),
-              accountEmail: uemail == null ? const Text('') : Text(uemail),
+              currentAccountPicture: CircleAvatar(
+                  foregroundImage:
+                      Image.network("https://api.multiavatar.com/$mn.png")
+                          .image,
+                  backgroundColor: Colors.deepOrange),
+              accountName: Text(" $mn $ml"),
+              accountEmail: me == null ? const Text('') : Text(me),
             ),
             ListTile(
               title: const Text("Profile"),
               leading: const Icon(Icons.home),
               onTap: () {
-                Navigator.of(context).pushReplacementNamed(Profile.routeName);
+                Navigator.of(context).pushNamed(Profile.routeName);
               },
             ),
             ListTile(
               title: const Text("Order history"),
               leading: const Icon(Icons.person),
               onTap: () {
-                Navigator.of(context).pushReplacementNamed("profile");
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => OrdersScreen()));
               },
             ),
             ListTile(
@@ -185,11 +239,11 @@ class _HomepageState extends State<Homepage> {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      /* ElevatedButton(
-                    onPressed: () async =>
-                        await Provider.of<Auth>(context, listen: false)
-                            .userData(),
-                    child: Text('change')),*/
+                      // ElevatedButton(
+                      //     onPressed: () async {
+                      //       // fun
+                      //     },
+                      //     child: const Text('change')),
                       const SizedBox(
                         height: 20,
                       ),
@@ -281,7 +335,7 @@ class _HomepageState extends State<Homepage> {
                               Card(
                                 child: Image(
                                     image: imageFromBase64String(
-                                            listrest[0].imageUrl)
+                                            listrest[4].imageUrl)
                                         .image),
                               ),
                               const SizedBox(
@@ -342,28 +396,28 @@ class _HomepageState extends State<Homepage> {
                               MostPopularCard(
                                 image: Image(
                                   image: imageFromBase64String(
-                                          listprod[7].imageUrl)
+                                          listprod[1].imageUrl)
                                       .image,
                                 ),
-                                name: listprod[7].title,
+                                name: listprod[1].title,
                               ),
                               const SizedBox(
                                 width: 30,
                               ),
                               MostPopularCard(
-                                  name: listprod[8].title,
+                                  name: listprod[2].title,
                                   image: Image(
                                       image: imageFromBase64String(
-                                    listprod[8].imageUrl,
+                                    listprod[2].imageUrl,
                                   ).image)),
                               const SizedBox(
                                 width: 30,
                               ),
                               MostPopularCard(
-                                  name: listprod[13].title,
+                                  name: listprod[3].title,
                                   image: Image(
                                       image: imageFromBase64String(
-                                    listprod[13].imageUrl,
+                                    listprod[3].imageUrl,
                                   ).image)),
                             ],
                           ),

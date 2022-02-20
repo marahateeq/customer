@@ -16,20 +16,13 @@ class RestaurantsScreen extends StatefulWidget {
 }
 
 class _RestaurantsScreenState extends State<RestaurantsScreen> {
-  var _isLoading = false;
-
   @override
   void initState() {
     super.initState();
-    _isLoading = true;
+
     Provider.of<Restaurants>(context, listen: false)
         .fetchAndSetRestaurants()
-        .then(
-          (_) => setState(
-            () => _isLoading = false,
-          ),
-        )
-        .catchError((error) => _isLoading = false);
+        .catchError((error) => print(error));
   }
 
   @override
@@ -66,7 +59,14 @@ class _RestaurantsScreenState extends State<RestaurantsScreen> {
 }
 
 class DataSearch extends SearchDelegate {
-  List list = [];
+  List list = [
+    'KFC',
+    "Ali Baba",
+    "Teen Wa Zaytoon",
+    "Awtar",
+    "Fairoz",
+    "Zorba"
+  ];
   List filternames = [];
   String result = '';
   @override
@@ -94,7 +94,7 @@ class DataSearch extends SearchDelegate {
     //var searchlist1 = query.isEmpty ? list :list.where((p) => p.startsWith(query)).toList() ;
 
     filternames =
-        list.where((element) => element.contains(query)).toList(); //startsWith
+        list.where((element) => element.startsWith(query)).toList(); //startsWith
     return ListView.builder(
         itemCount: query == "" ? list.length : filternames.length,
         itemBuilder: (context, i) {
