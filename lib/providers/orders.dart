@@ -39,6 +39,8 @@ class Orders with ChangeNotifier {
   }
 
   Future<void> fetchAndSetOrders() async {
+    print(authToken);
+    print(userId);
     final url =
         'https://test1-cf86f-default-rtdb.firebaseio.com/orders/$userId.json?auth=$authToken';
     // final : will not change
@@ -48,34 +50,44 @@ class Orders with ChangeNotifier {
       if (extractData == null) {
         return;
       }
+      print(extractData);
 
       final List<OrderItem> loadedOrders = [];
       extractData.forEach((orderId, orderData) {
+        // print(orderData);
         loadedOrders.add(OrderItem(
           id: orderId,
           amount: orderData['amount'],
-          dateTime: DateTime.parse(orderData['dateTime']),
+          dateTime: DateTime.parse(orderData['datetime']),
           products: (orderData['products'] as List<dynamic>)
               .map((item) => CartItem(
-
                   title: item['title'],
                   quantity: item['quantity'],
                   price: item['price']))
               .toList(),
         ));
-        _orders =
-            loadedOrders.reversed.toList(); //reversed:  اخر طلب يصبح بالبداية
+        _orders = loadedOrders.reversed.toList();
+        // print(_orders); //reversed:  اخر طلب يصبح بالبداية
+
         notifyListeners();
       });
     } catch (e) {
+      // print(e);
+
       rethrow;
     }
   }
 
   //////////////////////
 
-  Future<void> addOrders(List<CartItem> cartProduct, double total, bool status,
-      TimeOfDay time, DateTime date, String no , ) async {
+  Future<void> addOrders(
+    List<CartItem> cartProduct,
+    double total,
+    bool status,
+    TimeOfDay time,
+    DateTime date,
+    String no,
+  ) async {
     final url =
         'https://test1-cf86f-default-rtdb.firebaseio.com/orders/$userId.json?auth=$authToken'; //
 
@@ -84,22 +96,20 @@ class Orders with ChangeNotifier {
       final res = await http.post(Uri.parse(url),
           body: json.encode(// send data to firebase
               {
-                'id': userId,
-                'amount': total,
-                'timeofday': time.toString(),
-                'datetime': date.toString(),
-                'delivery': status,
-                'numberofpeople': status == true ? '0' : no,
+            'id': userId,
+            'amount': total,
+            'timeofday': time.toString(),
+            'datetime': date.toString(),
+            'delivery': status,
+            'numberofpeople': status == true ? '0' : no,
             'products': cartProduct
                 .map((cartprod) => {
-
                       'title': cartprod.title,
                       'quantity': cartprod.quantity,
                       'price': cartprod.price,
                       'resId': cartprod.restId,
                     })
                 .toList(),
-
           }));
 
       _orders.insert(

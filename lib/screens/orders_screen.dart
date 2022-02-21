@@ -13,35 +13,37 @@ class OrdersScreen extends StatelessWidget {
         centerTitle: true,
       ),
       body: FutureBuilder(
-        future: Provider.of<Orders>(context, listen: false).fetchAndSetOrders(),
-        builder: (ctx, AsyncSnapshot snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting) {
-            return const Center(child: CircularProgressIndicator());
-          } else {
-            if (snapshot.error != null) {
-              return const Center(child: Text('An error occured!'));
+          future:
+              Provider.of<Orders>(context, listen: false).fetchAndSetOrders(),
+          builder: (ctx, AsyncSnapshot snapshot) {
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return const Center(child: CircularProgressIndicator());
+              default:
+                // print("++++++++++++++++++++++++++");
+                // print(snapshot);
+                if (snapshot.hasError) {
+                  return const Center(child: Text('An error occured!'));
+                } else if (snapshot.hasData) {
+                  return const Center(
+                      child: Text(
+                    "There is no orders yet!",
+                    style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                        fontFamily: 'Quikhand'),
+                  ));
+                } else {
+                  return Consumer<Orders>(
+                    builder: (ctx, orderData, child) => ListView.builder(
+                        itemCount: orderData.orders.length,
+                        itemBuilder: (BuildContext context, int index) =>
+                            OrderItem(orderData.orders[index])),
+                  );
+                  //
+                }
             }
-            if (snapshot.data == null) {
-              return const Center(
-                  child: Text(
-                "There is no orders yet!",
-                style: TextStyle(
-                    fontWeight: FontWeight.bold,
-                    fontSize: 20,
-                    fontFamily: 'Quikhand'),
-              ));
-            } else {
-              return Consumer<Orders>(
-                builder: (ctx, orderData, child) => ListView.builder(
-                    itemCount: orderData.orders.length,
-                    itemBuilder: (BuildContext context, int index) =>
-                        OrderItem(orderData.orders[index])),
-              );
-              //
-            }
-          }
-        },
-      ),
+          }),
     );
   }
 }
